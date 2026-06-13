@@ -1,0 +1,104 @@
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+
+export type Lang = 'it' | 'en'
+
+type Dict = Record<string, { it: string; en: string }>
+
+/** Tutte le stringhe dell'interfaccia (IT/EN). I nomi degli elementi sono nel dataset. */
+const STRINGS: Dict = {
+  appTitle: { it: 'PerioOrbit 3D', en: 'PerioOrbit 3D' },
+  appSubtitle: {
+    it: 'Tavola periodica interattiva in 3D',
+    en: 'Interactive 3D periodic table',
+  },
+  resetView: { it: 'Reset vista', en: 'Reset view' },
+  toggleOrbits: { it: 'Orbite', en: 'Orbits' },
+  showOrbits: { it: 'Mostra orbite', en: 'Show orbits' },
+  hideOrbits: { it: 'Nascondi orbite', en: 'Hide orbits' },
+  trends: { it: 'Tendenze', en: 'Trends' },
+  filters: { it: 'Filtri', en: 'Filters' },
+  legend: { it: 'Legenda', en: 'Legend' },
+  category: { it: 'Categoria', en: 'Category' },
+  compare: { it: 'Confronta', en: 'Compare' },
+  compareHint: {
+    it: 'Seleziona due elementi per confrontarli',
+    en: 'Select two elements to compare',
+  },
+  close: { it: 'Chiudi', en: 'Close' },
+  none: { it: 'Nessuna', en: 'None' },
+  all: { it: 'Tutti', en: 'All' },
+  block: { it: 'Blocco', en: 'Block' },
+  period: { it: 'Periodo', en: 'Period' },
+  group: { it: 'Gruppo', en: 'Group' },
+  // proprietà
+  atomicNumber: { it: 'Numero atomico', en: 'Atomic number' },
+  symbol: { it: 'Simbolo', en: 'Symbol' },
+  name: { it: 'Nome', en: 'Name' },
+  atomicMass: { it: 'Massa atomica', en: 'Atomic mass' },
+  electronConfig: { it: 'Config. elettronica', en: 'Electron config.' },
+  phase: { it: 'Stato (298 K)', en: 'Phase (298 K)' },
+  atomicRadius: { it: 'Raggio atomico', en: 'Atomic radius' },
+  electronegativity: { it: 'Elettronegatività', en: 'Electronegativity' },
+  ionizationEnergy: { it: 'Energia di ionizz.', en: 'Ionization energy' },
+  density: { it: 'Densità', en: 'Density' },
+  meltingPoint: { it: 'Punto di fusione', en: 'Melting point' },
+  boilingPoint: { it: 'Punto di ebollizione', en: 'Boiling point' },
+  discoveryYear: { it: 'Anno di scoperta', en: 'Discovery year' },
+  radioactive: { it: 'Radioattivo', en: 'Radioactive' },
+  shells: { it: 'Elettroni per shell', en: 'Electrons per shell' },
+  yes: { it: 'Sì', en: 'Yes' },
+  no: { it: 'No', en: 'No' },
+  unknown: { it: 'n/d', en: 'n/a' },
+  antiquity: { it: 'Antichità', en: 'Antiquity' },
+  bc: { it: 'a.C.', en: 'BC' },
+  // tendenze (label)
+  trend_none: { it: 'Categoria', en: 'Category' },
+  trend_atomicRadius: { it: 'Raggio atomico', en: 'Atomic radius' },
+  trend_electronegativity: { it: 'Elettronegatività', en: 'Electronegativity' },
+  trend_ionizationEnergy: { it: 'Energia di ionizzazione', en: 'Ionization energy' },
+  trend_density: { it: 'Densità', en: 'Density' },
+  trend_meltingPoint: { it: 'Temperatura di fusione', en: 'Melting temperature' },
+  low: { it: 'basso', en: 'low' },
+  high: { it: 'alto', en: 'high' },
+  dimmedHint: {
+    it: 'Gli elementi senza dato sono attenuati',
+    en: 'Elements without data are dimmed',
+  },
+  hoverHint: {
+    it: 'Passa sopra un elemento • Click per i dettagli • Trascina per ruotare',
+    en: 'Hover an element • Click for details • Drag to rotate',
+  },
+  credits: { it: 'Fonti e licenze', en: 'Sources & licenses' },
+  selectForCompare: { it: 'Aggiungi al confronto', en: 'Add to compare' },
+  removeFromCompare: { it: 'Rimuovi dal confronto', en: 'Remove from compare' },
+}
+
+interface I18nContextValue {
+  lang: Lang
+  setLang: (l: Lang) => void
+  t: (key: keyof typeof STRINGS) => string
+}
+
+const I18nContext = createContext<I18nContextValue | null>(null)
+
+export function I18nProvider({ children }: { children: ReactNode }) {
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved = localStorage.getItem('perioorbit-lang')
+    return saved === 'en' ? 'en' : 'it'
+  })
+
+  useEffect(() => {
+    localStorage.setItem('perioorbit-lang', lang)
+    document.documentElement.lang = lang
+  }, [lang])
+
+  const t = (key: keyof typeof STRINGS) => STRINGS[key]?.[lang] ?? String(key)
+
+  return <I18nContext.Provider value={{ lang, setLang, t }}>{children}</I18nContext.Provider>
+}
+
+export function useI18n() {
+  const ctx = useContext(I18nContext)
+  if (!ctx) throw new Error('useI18n must be used within I18nProvider')
+  return ctx
+}

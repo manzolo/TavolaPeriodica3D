@@ -1,0 +1,29 @@
+# Due modi per provare l'app in locale con Docker:
+#
+#   1) Sviluppo con hot-reload (consigliato mentre modifichi il codice):
+#        docker compose up dev
+#      → apri http://localhost:5173
+#
+#   2) Anteprima della build di produzione (come sarà su GitHub Pages):
+#        docker compose up --build prod
+#      → apri http://localhost:8080
+
+services:
+  dev:
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
