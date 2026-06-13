@@ -9,7 +9,6 @@ import type { ElementData, TrendKey } from '../data/types'
 interface Props {
   trend: TrendKey
   filters: Filters
-  showOrbits: boolean
   hovered: ElementData | null
   selected: ElementData | null
   compare: number[]
@@ -19,17 +18,37 @@ interface Props {
   onBackgroundClick: () => void
 }
 
-const CAMERA_HOME = new THREE.Vector3(0, 0, 19)
+// Ingombro della tavola in unità di scena (18 colonne, ~10 righe)
+const TABLE_W = 21
+const TABLE_H = 12.5
+
+/** Distanza di camera che fa entrare tutta la tavola, in base all'aspect ratio */
+function fitDistance(aspect: number, fovDeg: number): number {
+  const fov = (fovDeg * Math.PI) / 180
+  const dH = TABLE_H / 2 / Math.tan(fov / 2)
+  const dW = TABLE_W / 2 / (Math.tan(fov / 2) * aspect)
+  const margin = aspect < 0.85 ? 1.06 : 1.16 // su mobile portrait meno margine
+  return Math.max(dH, dW) * margin
+}
 
 function CameraRig({ resetSignal }: { resetSignal: number }) {
   const controls = useRef<OrbitControlsImpl>(null)
-  const { camera } = useThree()
+  const { camera, size } = useThree()
 
-  useEffect(() => {
-    camera.position.copy(CAMERA_HOME)
-    controls.current?.target.set(0, 0, 0)
+  const frame = () => {
+    const aspect = size.width / size.height
+    const fov = (camera as THREE.PerspectiveCamera).fov ?? 50
+    const d = fitDistance(aspect, fov)
+    // su desktop sposta la vista a destra così il pannello sinistro
+    // non copre il gruppo 1 (metalli alcalini)
+    const offsetX = size.width > 760 ? -1.8 : 0
+    camera.position.set(offsetX, 0, d)
+    controls.current?.target.set(offsetX, 0, 0)
     controls.current?.update()
-  }, [resetSignal, camera])
+  }
+
+  // reframe su reset e quando cambia la dimensione del viewport
+  useEffect(frame, [resetSignal, size.width, size.height])
 
   return (
     <OrbitControls
@@ -37,11 +56,13 @@ function CameraRig({ resetSignal }: { resetSignal: number }) {
       makeDefault
       enableDamping
       dampingFactor={0.08}
-      minDistance={6}
-      maxDistance={45}
+      minDistance={4}
+      maxDistance={70}
       maxPolarAngle={Math.PI}
-      rotateSpeed={0.7}
-      zoomSpeed={0.9}
+      rotateSpeed={0.65}
+      zoomSpeed={1}
+      panSpeed={0.8}
+      touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN }}
     />
   )
 }
@@ -50,7 +71,7 @@ export function Scene(props: Props) {
   return (
     <Canvas
       dpr={[1, 2]}
-      camera={{ position: CAMERA_HOME.toArray(), fov: 50, near: 0.1, far: 200 }}
+      camera={{ position: [0, 0, 22], fov: 50, near: 0.1, far: 200 }}
       gl={{ antialias: true, alpha: false }}
       onPointerMissed={() => props.onBackgroundClick()}
     >
@@ -67,7 +88,6 @@ export function Scene(props: Props) {
         <PeriodicTable3D
           trend={props.trend}
           filters={props.filters}
-          showOrbits={props.showOrbits}
           hovered={props.hovered}
           selected={props.selected}
           compare={props.compare}

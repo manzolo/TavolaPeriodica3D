@@ -7,3 +7,8 @@ dist-ssr
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# artefatti di build TypeScript
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts

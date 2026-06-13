@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { Scene } from './three/Scene'
+import { AtomInspector } from './three/AtomInspector'
 import { Controls } from './components/Controls'
 import { Legend } from './components/Legend'
 import { Tooltip } from './components/Tooltip'
@@ -24,7 +25,10 @@ export default function App() {
   const [compare, setCompare] = useState<number[]>([])
   const [resetSignal, setResetSignal] = useState(0)
   const [showCredits, setShowCredits] = useState(false)
-  const [panelOpen, setPanelOpen] = useState(true)
+  // su schermi stretti il pannello parte chiuso per non coprire la tavola
+  const [panelOpen, setPanelOpen] = useState(
+    () => typeof window === 'undefined' || window.innerWidth > 760,
+  )
 
   const handleClick = useCallback((e: ElementData) => setSelected(e), [])
 
@@ -54,7 +58,6 @@ export default function App() {
         <Scene
           trend={trend}
           filters={filters}
-          showOrbits={showOrbits}
           hovered={hovered}
           selected={selected}
           compare={compare}
@@ -124,8 +127,12 @@ export default function App() {
         <Legend trend={trend} />
       </div>
 
-      {/* Tooltip hover */}
-      <Tooltip element={hovered} />
+      {/* Visualizzatore atomo 3D fluttuante (hover) — quando un dettaglio è aperto
+          l'atomo è già dentro il pannello, quindi qui mostriamo solo l'hover */}
+      <AtomInspector element={selected ? null : hovered} visible={showOrbits} />
+
+      {/* Tooltip hover — nascosto quando il pannello dettaglio è aperto per evitare sovrapposizioni */}
+      <Tooltip element={selected ? null : hovered} />
 
       {/* Pannello dettaglio */}
       <DetailPanel

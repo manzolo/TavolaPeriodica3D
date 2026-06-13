@@ -16,7 +16,7 @@ const PERIODS = [1, 2, 3, 4, 5, 6, 7]
 const CATEGORIES = Object.keys(CATEGORY_META) as Category[]
 
 export function Controls({ trend, setTrend, filters, setFilters }: Props) {
-  const { t } = useI18n()
+  const { t, tCategory } = useI18n()
   const trendKeys = Object.keys(TRENDS) as Array<Exclude<TrendKey, 'none'>>
 
   return (
@@ -56,7 +56,7 @@ export function Controls({ trend, setTrend, filters, setFilters }: Props) {
             <option value="all">{t('all')}</option>
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
-                {CATEGORY_META[c].label}
+                {tCategory(c)}
               </option>
             ))}
           </select>

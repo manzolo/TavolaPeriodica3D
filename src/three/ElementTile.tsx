@@ -3,7 +3,6 @@ import { useFrame } from '@react-three/fiber'
 import { RoundedBox, Text } from '@react-three/drei'
 import * as THREE from 'three'
 import type { ElementData } from '../data/types'
-import { ElectronOrbits } from './ElectronOrbits'
 
 interface Props {
   element: ElementData
@@ -13,7 +12,6 @@ interface Props {
   active: boolean
   selected: boolean
   inCompare: boolean
-  showOrbits: boolean
   onHover: (e: ElementData | null) => void
   onClick: (e: ElementData) => void
 }
@@ -29,7 +27,6 @@ export function ElementTile({
   active,
   selected,
   inCompare,
-  showOrbits,
   onHover,
   onClick,
 }: Props) {
@@ -152,13 +149,6 @@ export function ElementTile({
           {element.atomicMass.toFixed(element.atomicMass < 100 ? 2 : 1)}
         </Text>
       </group>
-
-      {/* Orbite elettroniche per l'elemento attivo */}
-      {showOrbits && active && (
-        <group position={[0, 0, 2.4]}>
-          <ElectronOrbits atomicNumber={element.number} color={color} scale={0.92} />
-        </group>
-      )}
     </group>
   )
 }

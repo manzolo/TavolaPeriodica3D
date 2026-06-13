@@ -1,8 +1,37 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import type { Block, Category, Phase } from '../data/types'
 
 export type Lang = 'it' | 'en'
 
 type Dict = Record<string, { it: string; en: string }>
+
+/** Etichette categorie (IT/EN) — i colori restano in CATEGORY_META */
+const CATEGORY_I18N: Record<Category, { it: string; en: string }> = {
+  'metallo-alcalino': { it: 'Metallo alcalino', en: 'Alkali metal' },
+  'metallo-alcalino-terroso': { it: 'Metallo alcalino terroso', en: 'Alkaline earth metal' },
+  'metallo-transizione': { it: 'Metallo di transizione', en: 'Transition metal' },
+  'metallo-post-transizione': { it: 'Metallo post-transizione', en: 'Post-transition metal' },
+  semimetallo: { it: 'Semimetallo', en: 'Metalloid' },
+  'nonmetallo-reattivo': { it: 'Non metallo reattivo', en: 'Reactive nonmetal' },
+  'gas-nobile': { it: 'Gas nobile', en: 'Noble gas' },
+  lantanide: { it: 'Lantanide', en: 'Lanthanide' },
+  attinide: { it: 'Attinide', en: 'Actinide' },
+  sconosciuto: { it: 'Proprietà ignote', en: 'Unknown properties' },
+}
+
+const PHASE_I18N: Record<Phase, { it: string; en: string }> = {
+  solido: { it: 'Solido', en: 'Solid' },
+  liquido: { it: 'Liquido', en: 'Liquid' },
+  gassoso: { it: 'Gassoso', en: 'Gas' },
+  sconosciuto: { it: 'Sconosciuto', en: 'Unknown' },
+}
+
+const BLOCK_I18N: Record<Block, { it: string; en: string }> = {
+  s: { it: 'Blocco s', en: 'Block s' },
+  p: { it: 'Blocco p', en: 'Block p' },
+  d: { it: 'Blocco d', en: 'Block d' },
+  f: { it: 'Blocco f', en: 'Block f' },
+}
 
 /** Tutte le stringhe dell'interfaccia (IT/EN). I nomi degli elementi sono nel dataset. */
 const STRINGS: Dict = {
@@ -71,12 +100,20 @@ const STRINGS: Dict = {
   credits: { it: 'Fonti e licenze', en: 'Sources & licenses' },
   selectForCompare: { it: 'Aggiungi al confronto', en: 'Add to compare' },
   removeFromCompare: { it: 'Rimuovi dal confronto', en: 'Remove from compare' },
+  hoverForAtom: {
+    it: 'Passa sopra un elemento per vedere l’atomo',
+    en: 'Hover an element to see the atom',
+  },
+  atomViewer: { it: 'Visualizzatore atomo', en: 'Atom viewer' },
 }
 
 interface I18nContextValue {
   lang: Lang
   setLang: (l: Lang) => void
   t: (key: keyof typeof STRINGS) => string
+  tCategory: (c: Category) => string
+  tPhase: (p: Phase) => string
+  tBlock: (b: Block) => string
 }
 
 const I18nContext = createContext<I18nContextValue | null>(null)
@@ -93,8 +130,15 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [lang])
 
   const t = (key: keyof typeof STRINGS) => STRINGS[key]?.[lang] ?? String(key)
+  const tCategory = (c: Category) => CATEGORY_I18N[c][lang]
+  const tPhase = (p: Phase) => PHASE_I18N[p][lang]
+  const tBlock = (b: Block) => BLOCK_I18N[b][lang]
 
-  return <I18nContext.Provider value={{ lang, setLang, t }}>{children}</I18nContext.Provider>
+  return (
+    <I18nContext.Provider value={{ lang, setLang, t, tCategory, tPhase, tBlock }}>
+      {children}
+    </I18nContext.Provider>
+  )
 }
 
 export function useI18n() {

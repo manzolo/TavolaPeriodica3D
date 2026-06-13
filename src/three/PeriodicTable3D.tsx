@@ -15,7 +15,6 @@ export interface Filters {
 interface Props {
   trend: TrendKey
   filters: Filters
-  showOrbits: boolean
   hovered: ElementData | null
   selected: ElementData | null
   compare: number[]
@@ -36,7 +35,6 @@ function passesFilters(e: ElementData, f: Filters): boolean {
 export function PeriodicTable3D({
   trend,
   filters,
-  showOrbits,
   hovered,
   selected,
   compare,
@@ -79,7 +77,6 @@ export function PeriodicTable3D({
             active={active}
             selected={selected?.number === e.number}
             inCompare={compare.includes(e.number)}
-            showOrbits={showOrbits}
             onHover={onHover}
             onClick={onClick}
           />

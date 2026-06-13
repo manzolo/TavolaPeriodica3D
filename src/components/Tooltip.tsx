@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { ElementData } from '../data/types'
-import { CATEGORY_META, PHASE_LABEL } from '../data/elements'
+import { CATEGORY_META } from '../data/elements'
 import { electronsPerShell } from '../utils/electronConfig'
 import { useI18n } from '../i18n'
 
 export function Tooltip({ element }: { element: ElementData | null }) {
-  const { t, lang } = useI18n()
+  const { t, lang, tCategory, tPhase } = useI18n()
   const [pos, setPos] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export function Tooltip({ element }: { element: ElementData | null }) {
         <span className="tooltip__name">{lang === 'it' ? element.name : element.nameEn}</span>
       </div>
       <div className="tooltip__cat" style={{ color: meta.color }}>
-        {meta.label}
+        {tCategory(element.category)}
         {element.radioactive && <span className="tooltip__radio">☢ {t('radioactive')}</span>}
       </div>
       <dl className="tooltip__grid">
@@ -48,7 +48,7 @@ export function Tooltip({ element }: { element: ElementData | null }) {
         <dt>{t('electronConfig')}</dt>
         <dd className="mono">{element.electronConfiguration}</dd>
         <dt>{t('phase')}</dt>
-        <dd>{PHASE_LABEL[element.phase]}</dd>
+        <dd>{tPhase(element.phase)}</dd>
         <dt>{t('shells')}</dt>
         <dd className="mono">{shells}</dd>
       </dl>

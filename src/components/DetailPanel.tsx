@@ -1,7 +1,8 @@
 import type { ElementData } from '../data/types'
-import { CATEGORY_META, PHASE_LABEL, BLOCK_LABEL } from '../data/elements'
+import { CATEGORY_META } from '../data/elements'
 import { electronsPerShell } from '../utils/electronConfig'
 import { useI18n } from '../i18n'
+import { AtomCanvas } from '../three/AtomInspector'
 
 interface Props {
   element: ElementData | null
@@ -17,7 +18,7 @@ function fmtYear(y: number | null, t: (k: any) => string): string {
 }
 
 export function DetailPanel({ element, inCompare, onClose, onToggleCompare }: Props) {
-  const { t, lang } = useI18n()
+  const { t, lang, tCategory, tPhase, tBlock } = useI18n()
   if (!element) return null
 
   const meta = CATEGORY_META[element.category]
@@ -27,11 +28,11 @@ export function DetailPanel({ element, inCompare, onClose, onToggleCompare }: Pr
   const rows: Array<[string, string]> = [
     [t('atomicNumber'), String(element.number)],
     [t('atomicMass'), `${element.atomicMass} u`],
-    [t('category'), meta.label],
-    [t('block'), BLOCK_LABEL[element.block]],
+    [t('category'), tCategory(element.category)],
+    [t('block'), tBlock(element.block)],
     [t('group'), element.group ? String(element.group) : '—'],
     [t('period'), String(element.period)],
-    [t('phase'), PHASE_LABEL[element.phase]],
+    [t('phase'), tPhase(element.phase)],
     [t('electronConfig'), element.electronConfiguration],
     [t('shells'), shells],
     [t('atomicRadius'), element.atomicRadius != null ? `${element.atomicRadius} pm` : na],
@@ -68,8 +69,14 @@ export function DetailPanel({ element, inCompare, onClose, onToggleCompare }: Pr
           <div className="detail__num">{element.number}</div>
           <h2 className="detail__name">{lang === 'it' ? element.name : element.nameEn}</h2>
           <div className="detail__nameen">{lang === 'it' ? element.nameEn : element.name}</div>
-          <div className="detail__cat">{meta.label}</div>
+          <div className="detail__cat">{tCategory(element.category)}</div>
         </div>
+      </div>
+
+      {/* Visualizzatore atomo 3D — zona nera, vista di taglio */}
+      <div className="detail__atom">
+        <span className="detail__atomlabel">{t('atomViewer')}</span>
+        <AtomCanvas key={element.number} element={element} scale={0.74} />
       </div>
 
       <dl className="detail__table">
