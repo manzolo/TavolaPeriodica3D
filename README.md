@@ -5,6 +5,11 @@
 **Tavola periodica degli elementi interattiva in 3D** — con orbite elettroniche animate, tendenze periodiche e dati scientifici.
 **Interactive 3D periodic table** — with animated electron orbits, periodic trends and scientific data.
 
+### 🚀 [**▶ LIVE DEMO — manzolo.github.io/TavolaPeriodica3D**](https://manzolo.github.io/TavolaPeriodica3D/)
+
+[![Deploy to GitHub Pages](https://github.com/manzolo/TavolaPeriodica3D/actions/workflows/deploy.yml/badge.svg)](https://github.com/manzolo/TavolaPeriodica3D/actions/workflows/deploy.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-00e5ff.svg)](./LICENSE)
+
 🇮🇹 Italiano · 🇬🇧 English &nbsp;|&nbsp; React + TypeScript + three.js (@react-three/fiber)
 
 </div>
