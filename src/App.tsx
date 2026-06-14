@@ -7,6 +7,7 @@ import { Tooltip } from './components/Tooltip'
 import { DetailPanel } from './components/DetailPanel'
 import { ComparePanel } from './components/ComparePanel'
 import { CreditsModal } from './components/CreditsModal'
+import { NavPad } from './components/NavPad'
 import { useI18n } from './i18n'
 import { ELEMENTS_BY_NUMBER } from './data/elements'
 import type { ElementData, TrendKey } from './data/types'
@@ -25,6 +26,7 @@ export default function App() {
   const [compare, setCompare] = useState<number[]>([])
   const [resetSignal, setResetSignal] = useState(0)
   const [showCredits, setShowCredits] = useState(false)
+  const [showNav, setShowNav] = useState(false)
   // su schermi stretti il pannello parte chiuso per non coprire la tavola
   const [panelOpen, setPanelOpen] = useState(
     () => typeof window === 'undefined' || window.innerWidth > 760,
@@ -95,6 +97,16 @@ export default function App() {
             <span className="btn__label">{t('resetView')}</span>
           </button>
 
+          <button
+            className={`btn ${showNav ? 'btn--on' : ''}`}
+            onClick={() => setShowNav((v) => !v)}
+            title={t('navToggle')}
+            aria-pressed={showNav}
+          >
+            <span className="btn__icon">✛</span>
+            <span className="btn__label">{t('navToggle')}</span>
+          </button>
+
           <div className="lang">
             <button
               className={`lang__btn ${lang === 'it' ? 'is-active' : ''}`}
@@ -116,7 +128,7 @@ export default function App() {
 
       {/* Pannello controlli (collassabile su mobile) */}
       <button
-        className="panel-toggle"
+        className={`panel-toggle ${panelOpen ? 'is-open' : ''}`}
         onClick={() => setPanelOpen((v) => !v)}
         aria-label="toggle panel"
       >
@@ -141,6 +153,9 @@ export default function App() {
         onClose={() => setSelected(null)}
         onToggleCompare={toggleCompare}
       />
+
+      {/* D-pad di navigazione accessibile (toggle dalla topbar) */}
+      <NavPad visible={showNav} />
 
       {/* Confronto */}
       <ComparePanel

@@ -39,6 +39,32 @@ Snapshot versionato nel repo, niente chiamate API a runtime (app statica).
       prop `interactive` e `OrbitControls` (rotazione + zoom scroll, pan off,
       damping, distanza 2–14). Inset hover resta statico. Hint d'uso IT/EN.
 
+## ✅ Fatto — D-pad di navigazione accessibile
+
+- [x] Store esterno `src/three/navStore.ts`: le due scene (tavola e atomo,
+      `<Canvas>` separati) registrano una `NavApi` con priorità; il pad agisce
+      sul target a priorità più alta → comportamento **contestuale** (atomo se
+      il pannello dettaglio è aperto, altrimenti tavola).
+- [x] `src/components/NavPad.tsx`: frecce, zoom +/−, press-and-hold continuo
+      (loop rAF) + step singolo da tastiera; `aria-label` IT/EN, `role=group`,
+      focus ring, `touch-action: none`.
+- [x] Pulsante centrale = **toggle modalità 3D/2D**: 3D ruota (orbita), 2D
+      trasla (pan nel piano schermo, metodo `pan` in navStore). Indicatore
+      acceso in 2D.
+- [x] Toggle `✛ Navigazione` nella topbar; aggancio via `makeOrbitNavApi`
+      (manipola l'offset camera→target in sferiche). Reset tavola = reframe
+      `CameraRig`; reset atomo = camera obliqua iniziale.
+
+## ✅ Fatto — Fix mobile / UI
+
+- [x] Fog adattiva in `CameraRig` (`near=d+8`, `far=d+55`): su portrait la
+      tavola non appare più nera/troppo lontana.
+- [x] Topbar compatta sotto i 760px (brand, 3 bottoni e lingue non escono).
+- [x] D-pad `z-index` sopra il pannello dettaglio (visibile quando si apre un
+      elemento) e dimensioni ridotte su mobile.
+- [x] Maniglia apri/chiudi pannello: a pannello aperto diventa un pulsante
+      tondo staccato a destra del pannello (non più incollata alla legenda).
+
 ## ⏳ Prossimi passi
 
 - [ ] Estendere il dataset agli isotopi naturali di più elementi (o tutti).

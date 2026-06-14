@@ -4,6 +4,7 @@ import { OrbitControls, Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { PeriodicTable3D, type Filters } from './PeriodicTable3D'
+import { registerNav, unregisterNav, makeOrbitNavApi } from './navStore'
 import type { ElementData, TrendKey } from '../data/types'
 
 interface Props {
@@ -33,7 +34,7 @@ function fitDistance(aspect: number, fovDeg: number): number {
 
 function CameraRig({ resetSignal }: { resetSignal: number }) {
   const controls = useRef<OrbitControlsImpl>(null)
-  const { camera, size } = useThree()
+  const { camera, size, scene } = useThree()
 
   const frame = () => {
     const aspect = size.width / size.height
@@ -45,10 +46,33 @@ function CameraRig({ resetSignal }: { resetSignal: number }) {
     camera.position.set(offsetX, 0, d)
     controls.current?.target.set(offsetX, 0, 0)
     controls.current?.update()
+    // fog adattiva: su mobile portrait la distanza di fit è grande, quindi
+    // ancoriamo la nebbia oltre la tavola (a ~d) per non farla annerire
+    const fog = scene.fog as THREE.Fog | null
+    if (fog && (fog as THREE.Fog).isFog) {
+      fog.near = d + 8
+      fog.far = d + 55
+    }
   }
 
   // reframe su reset e quando cambia la dimensione del viewport
   useEffect(frame, [resetSignal, size.width, size.height])
+
+  // tieni un riferimento aggiornato a frame() per il reset dal pad
+  const frameRef = useRef(frame)
+  frameRef.current = frame
+
+  // registra l'API di navigazione per il D-pad (priorità bassa = tavola)
+  useEffect(() => {
+    if (!controls.current) return
+    const api = makeOrbitNavApi(
+      controls.current,
+      camera as THREE.PerspectiveCamera,
+      () => frameRef.current(),
+    )
+    const id = registerNav(0, api)
+    return () => unregisterNav(id)
+  }, [camera])
 
   return (
     <OrbitControls

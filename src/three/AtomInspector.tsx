@@ -1,10 +1,34 @@
-import { Canvas } from '@react-three/fiber'
+import { useEffect } from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import * as THREE from 'three'
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { ElectronOrbits } from './ElectronOrbits'
+import { registerNav, unregisterNav, makeOrbitNavApi } from './navStore'
 import type { ElementData } from '../data/types'
 import { CATEGORY_META } from '../data/elements'
 import { electronsPerShell } from '../utils/electronConfig'
 import { useI18n } from '../i18n'
+
+/** Posizione/zoom iniziale della camera dell'atomo (per il reset) */
+const ATOM_CAMERA = new THREE.Vector3(2.6, 1.7, 6.2)
+
+/** Registra l'API di navigazione dell'atomo (priorità alta → vince sulla tavola). */
+function AtomNav() {
+  const controls = useThree((s) => s.controls) as OrbitControlsImpl | null
+  const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera
+  useEffect(() => {
+    if (!controls) return
+    const api = makeOrbitNavApi(controls, camera, () => {
+      camera.position.copy(ATOM_CAMERA)
+      controls.target.set(0, 0, 0)
+      controls.update()
+    })
+    const id = registerNav(10, api)
+    return () => unregisterNav(id)
+  }, [controls, camera])
+  return null
+}
 
 /**
  * Canvas 3D dell'atomo, sfondo trasparente (sopra a una superficie nera),
@@ -49,15 +73,19 @@ export function AtomCanvas({
         />
       </group>
       {interactive && (
-        <OrbitControls
-          enablePan={false}
-          minDistance={2}
-          maxDistance={14}
-          rotateSpeed={0.6}
-          zoomSpeed={0.8}
-          enableDamping
-          dampingFactor={0.12}
-        />
+        <>
+          <OrbitControls
+            makeDefault
+            enablePan={false}
+            minDistance={2}
+            maxDistance={14}
+            rotateSpeed={0.6}
+            zoomSpeed={0.8}
+            enableDamping
+            dampingFactor={0.12}
+          />
+          <AtomNav />
+        </>
       )}
     </Canvas>
   )
