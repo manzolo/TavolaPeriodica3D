@@ -531,6 +531,19 @@ button {
   text-transform: uppercase;
   color: var(--txt-dim);
 }
+.detail__atomhint {
+  position: absolute;
+  bottom: 7px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+  font-size: 9.5px;
+  letter-spacing: 0.05em;
+  color: var(--txt-dim);
+  pointer-events: none;
+  opacity: 0.7;
+}
 
 /* ---------- Detail panel ---------- */
 .detail {
@@ -631,6 +644,62 @@ button {
   text-align: right;
   color: var(--txt);
 }
+/* ---------- Isotopi ---------- */
+.detail__isotopes {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.iso-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 4px;
+}
+.iso-chip {
+  padding: 5px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--txt);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  transition: all 0.14s ease;
+}
+.iso-chip:hover {
+  border-color: var(--accent, var(--cyan));
+}
+.iso-chip.is-active {
+  background: var(--accent, var(--cyan));
+  border-color: var(--accent, var(--cyan));
+  color: #06121a;
+  font-weight: 600;
+}
+.iso-name {
+  margin: 4px 0 2px;
+  font-size: 12px;
+  color: var(--txt-dim);
+  font-style: italic;
+}
+.iso-legend {
+  display: flex;
+  gap: 14px;
+  margin: 6px 0 2px;
+  font-size: 11.5px;
+  color: var(--txt-dim);
+}
+.iso-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.iso-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
 .detail__compare {
   margin-top: 16px;
   width: 100%;

@@ -2,22 +2,26 @@ import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { electronsPerShell } from '../utils/electronConfig'
+import { Nucleus } from './Nucleus'
 
 interface Props {
   atomicNumber: number
   /** colore accento (esadecimale) */
   color: string
   scale?: number
+  /** protoni nel nucleo (default = numero atomico) */
+  protons?: number
+  /** neutroni nel nucleo (dipende dall'isotopo; 0 se non specificato) */
+  neutrons?: number
 }
-
-const NUCLEUS_COLOR = '#ff4d6d'
 
 /**
  * Modello di Bohr semplificato: una traiettoria circolare per ogni shell,
  * con il numero corretto di elettroni per shell, animati in rotazione.
  * Ogni shell è leggermente inclinata per dare profondità 3D.
+ * Al centro il nucleo 3D con protoni e neutroni.
  */
-export function ElectronOrbits({ atomicNumber, color, scale = 1 }: Props) {
+export function ElectronOrbits({ atomicNumber, color, scale = 1, protons, neutrons }: Props) {
   const shells = useMemo(() => electronsPerShell(atomicNumber), [atomicNumber])
   const group = useRef<THREE.Group>(null)
 
@@ -55,17 +59,8 @@ export function ElectronOrbits({ atomicNumber, color, scale = 1 }: Props) {
 
   return (
     <group ref={group} scale={scale}>
-      {/* Nucleo pulsante */}
-      <mesh>
-        <sphereGeometry args={[0.22, 24, 24]} />
-        <meshStandardMaterial
-          color={NUCLEUS_COLOR}
-          emissive={NUCLEUS_COLOR}
-          emissiveIntensity={1.6}
-          toneMapped={false}
-        />
-      </mesh>
-      <pointLight color={color} intensity={2} distance={6} />
+      {/* Nucleo 3D: protoni + neutroni */}
+      <Nucleus protons={protons ?? atomicNumber} neutrons={neutrons ?? 0} accent={color} />
 
       {shellData.map((sd, s) => (
         <group key={s} rotation={[sd.tilt, sd.yaw, 0]}>

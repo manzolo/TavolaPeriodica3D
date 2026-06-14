@@ -105,6 +105,30 @@ const STRINGS: Dict = {
     en: 'Hover an element to see the atom',
   },
   atomViewer: { it: 'Visualizzatore atomo', en: 'Atom viewer' },
+  atomHint: {
+    it: 'Trascina per ruotare • Scroll per zoom',
+    en: 'Drag to rotate • Scroll to zoom',
+  },
+  // isotopi
+  isotopes: { it: 'Isotopi', en: 'Isotopes' },
+  massNumber: { it: 'Numero di massa', en: 'Mass number' },
+  protons: { it: 'Protoni', en: 'Protons' },
+  neutrons: { it: 'Neutroni', en: 'Neutrons' },
+  abundance: { it: 'Abbondanza naturale', en: 'Natural abundance' },
+  stability: { it: 'Stabilità', en: 'Stability' },
+  stable: { it: 'Stabile', en: 'Stable' },
+  unstable: { it: 'Radioattivo', en: 'Radioactive' },
+  halfLife: { it: 'Emivita', en: 'Half-life' },
+  traces: { it: 'Tracce', en: 'Traces' },
+  // unità di tempo per l'emivita
+  unit_s: { it: 's', en: 's' },
+  unit_min: { it: 'min', en: 'min' },
+  unit_h: { it: 'h', en: 'h' },
+  unit_d: { it: 'giorni', en: 'days' },
+  unit_y: { it: 'anni', en: 'years' },
+  unit_ky: { it: 'mila anni', en: 'thousand years' },
+  unit_My: { it: 'milioni di anni', en: 'million years' },
+  unit_Gy: { it: 'miliardi di anni', en: 'billion years' },
 }
 
 interface I18nContextValue {

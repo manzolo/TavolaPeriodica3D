@@ -51,6 +51,29 @@ export interface ElementData {
   ypos: number
 }
 
+/**
+ * Un singolo isotopo (nuclide) di un elemento.
+ * I protoni coincidono con il numero atomico dell'elemento; i neutroni si
+ * ricavano come massNumber − numero atomico, quindi non vengono memorizzati.
+ */
+export interface IsotopeData {
+  /** Numero di massa A (protoni + neutroni), es. 14 per ¹⁴C */
+  massNumber: number
+  /**
+   * Abbondanza naturale come frazione [0..1] della miscela isotopica naturale.
+   * `null` = presente solo in tracce o non presente in natura (sintetico).
+   */
+  abundance: number | null
+  /** true se stabile (nessun decadimento osservato) */
+  stable: boolean
+  /** Emivita in secondi; `null` se stabile */
+  halfLifeSeconds: number | null
+  /** Nome comune in italiano, se ne ha uno (es. Deuterio) */
+  name?: string
+  /** Nome comune inglese (es. Deuterium) */
+  nameEn?: string
+}
+
 export type TrendKey =
   | 'none'
   | 'atomicRadius'

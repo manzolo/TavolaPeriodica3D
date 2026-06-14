@@ -18,6 +18,15 @@ copyright. Sono stati compilati incrociando le seguenti fonti aperte:
 - **Los Alamos National Laboratory** — Periodic Table
   <https://periodic.lanl.gov/>
 
+### Dati degli isotopi
+Abbondanze isotopiche, stabilità ed emivite (per gli elementi al momento
+modellati) provengono da:
+
+- **CIAAW** (IUPAC Commission on Isotopic Abundances and Atomic Weights) —
+  Isotopic Compositions <https://www.ciaaw.org/isotopic-abundances.htm>
+- **IAEA** — LiveChart of Nuclides (emivite e decadimenti)
+  <https://www-nds.iaea.org/relnsd/vcharthtml/VChartHTML.html>
+
 > ⚠️ Progetto **didattico**, senza scopo di lucro. I valori sono forniti
 > "così come sono", senza garanzia di accuratezza. Per usi scientifici reali
 > verifica sempre le fonti primarie.
@@ -46,6 +55,14 @@ were compiled by cross-referencing these open sources:
 - **Wikipedia** — List of chemical elements (text is CC BY-SA; numerical *data*
   remain public-domain facts)
 - **Los Alamos National Laboratory** — Periodic Table
+
+### Isotope data
+Isotopic abundances, stability and half-lives (for the elements currently
+modelled) come from:
+
+- **CIAAW** (IUPAC Commission on Isotopic Abundances and Atomic Weights) —
+  Isotopic Compositions
+- **IAEA** — LiveChart of Nuclides (half-lives and decay data)
 
 > ⚠️ **Educational**, non-commercial project. Values are provided "as is",
 > without any warranty of accuracy. For real scientific use always verify the
