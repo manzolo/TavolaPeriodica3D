@@ -89,4 +89,11 @@ export interface TrendConfig {
   accessor: (e: ElementData) => number | null
   /** scala logaritmica per valori con ampio range (densità, energia) */
   log?: boolean
+  /**
+   * Curva di gamma applicata al valore normalizzato (t in [0,1]) per
+   * accentuare le variazioni quando i dati sono molto addensati.
+   * gamma < 1 espande la fascia bassa (la maggior parte degli elementi),
+   * gamma > 1 espande quella alta. Mantiene invariati gli estremi 0 e 1.
+   */
+  gamma?: number
 }

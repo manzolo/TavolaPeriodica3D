@@ -12,6 +12,9 @@ const TEXT = {
     fontsTitle: 'Font e librerie',
     fontsBody:
       'Font Chakra Petch e IBM Plex Mono via Google Fonts (SIL Open Font License). Three.js, React, @react-three/fiber e @react-three/drei sono rilasciati sotto licenza MIT.',
+    thanksTitle: 'Ringraziamenti',
+    thanksBody:
+      'Massimo Bianchini (CNR-IFAC, Istituto di Fisica Applicata "Nello Carrara") per il suggerimento sulla resa cromatica delle tendenze (gradiente non lineare per densità ed energia di ionizzazione).',
     disclaimer:
       'Progetto didattico, senza scopo di lucro. Nessun dato proprietario è stato copiato: i valori provengono da fonti aperte e dal pubblico dominio.',
   },
@@ -26,6 +29,9 @@ const TEXT = {
     fontsTitle: 'Fonts & libraries',
     fontsBody:
       'Chakra Petch and IBM Plex Mono fonts via Google Fonts (SIL Open Font License). Three.js, React, @react-three/fiber and @react-three/drei are released under the MIT license.',
+    thanksTitle: 'Acknowledgements',
+    thanksBody:
+      'Massimo Bianchini (CNR-IFAC, "Nello Carrara" Institute of Applied Physics) for the suggestion on the colour rendering of the trends (non-linear gradient for density and ionization energy).',
     disclaimer:
       'Educational, non-commercial project. No proprietary data was copied: values come from open and public-domain sources.',
   },
@@ -67,6 +73,9 @@ export function CreditsModal({ onClose }: { onClose: () => void }) {
 
         <h3 className="modal__h3">{x.fontsTitle}</h3>
         <p>{x.fontsBody}</p>
+
+        <h3 className="modal__h3">{x.thanksTitle}</h3>
+        <p>{x.thanksBody}</p>
 
         <p className="modal__disclaimer">{x.disclaimer}</p>
       </div>

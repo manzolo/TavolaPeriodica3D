@@ -31,6 +31,11 @@ modellati) provengono da:
 > "così come sono", senza garanzia di accuratezza. Per usi scientifici reali
 > verifica sempre le fonti primarie.
 
+### Ringraziamenti
+- **Massimo Bianchini** (CNR-IFAC, Istituto di Fisica Applicata "Nello Carrara")
+  — per il suggerimento sulla resa cromatica delle tendenze (gradiente non
+  lineare per densità ed energia di ionizzazione).
+
 ### Codice
 Rilasciato sotto **licenza MIT** (vedi `LICENSE`).
 
@@ -67,6 +72,11 @@ modelled) come from:
 > ⚠️ **Educational**, non-commercial project. Values are provided "as is",
 > without any warranty of accuracy. For real scientific use always verify the
 > primary sources.
+
+### Acknowledgements
+- **Massimo Bianchini** (CNR-IFAC, "Nello Carrara" Institute of Applied Physics)
+  — for the suggestion on the colour rendering of the trends (non-linear
+  gradient for density and ionization energy).
 
 ### Code
 Released under the **MIT license** (see `LICENSE`).

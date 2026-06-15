@@ -21,13 +21,18 @@ export const TRENDS: Record<Exclude<TrendKey, 'none'>, TrendConfig> = {
     label: 'trend_ionizationEnergy',
     unit: 'kJ/mol',
     accessor: (e) => e.ionizationEnergy,
+    // He (2372) allunga la scala: senza correzione il 90% degli elementi
+    // resta nella fascia bassa. gamma<1 apre il "grumo" dei valori piccoli.
+    gamma: 0.45,
   },
   density: {
     key: 'density',
     label: 'trend_density',
     unit: 'g/cm³',
     accessor: (e) => e.density,
-    log: true,
+    // scala lineare (i gas restano in fondo) + gamma per distanziare la
+    // grande maggioranza di solidi/liquidi che altrimenti si confonde.
+    gamma: 0.65,
   },
   meltingPoint: {
     key: 'meltingPoint',
@@ -97,5 +102,8 @@ export function normalizedTrend(
   const { min, max } = trendRange(key)
   const x = cfg.log ? Math.log10(v) : v
   if (max === min) return 0.5
-  return (x - min) / (max - min)
+  const t = (x - min) / (max - min)
+  // gamma opzionale: rimappa t per rendere più leggibili le variazioni.
+  // Math.pow preserva gli estremi (0→0, 1→1), quindi la legenda resta valida.
+  return cfg.gamma != null ? Math.pow(t, cfg.gamma) : t
 }
